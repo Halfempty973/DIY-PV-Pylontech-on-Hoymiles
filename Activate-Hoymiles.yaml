@@ -1,0 +1,16 @@
+alias: Hoymiles aktivieren
+trigger:
+  - platform: template
+    value_template: >
+      {{ states('sensor.battery_soc') | float > (states('input_number.soc_min') | float) }}
+condition:
+  - condition: state
+    entity_id: switch.ac_laden
+    state: "off"
+  - condition: state
+    entity_id: switch.hoymiles_output
+    state: "off"
+action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.hoymiles_output
