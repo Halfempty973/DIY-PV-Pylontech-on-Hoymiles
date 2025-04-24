@@ -1,0 +1,28 @@
+alias: Dynamischer Ladestrom für AC-Laden
+trigger:
+  - platform: template
+    value_template: >
+      {{ states('sensor.solar_power') | float > (states('input_number.solar_threshold') | float) }}
+  - platform: state
+    entity_id: sensor.battery1_input_power
+  - platform: time_pattern
+    minutes: "/1"  # alle 1 Minute prüfen
+condition:
+  - condition: template
+    value_template: >
+      {{ states('sensor.solar_power') | float > (states('input_number.solar_threshold') | float) }}
+  - condition: state
+    entity_id: switch.ac_laden
+    state: "on"
+action:
+  - variables:
+      solar: "{{ states('input_number.solar_power_value') | float(0) }}"
+      akku1: "{{ states('sensor.battery1_input_power') | float(0) }}"
+      verfuegbar: "{{ solar - 500 - akku1 }}"
+      ziel: "{{ [ [verfuegbar, 0] | max, 750 ] | min }}"
+      strom: "{{ (ziel / 230) | round(2) }}"
+  - service: number.set_value
+    target:
+      entity_id: number.ac_lader_current
+    data:
+      value: "{{ strom }}"
