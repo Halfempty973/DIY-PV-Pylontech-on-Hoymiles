@@ -1,0 +1,13 @@
+alias: Hoymiles deaktivieren bei Mindest-SOC
+trigger:
+  - platform: template
+    value_template: >
+      {{ states('sensor.battery_soc') | float < (states('input_number.soc_min') | float) }}
+condition:
+  - condition: state
+    entity_id: switch.hoymiles_output
+    state: "on"
+action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.hoymiles_output
