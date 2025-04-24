@@ -1,0 +1,23 @@
+alias: Sicherheit - Nie beide gleichzeitig
+trigger:
+  - platform: state
+    entity_id: switch.ac_laden
+    to: "on"
+  - platform: state
+    entity_id: switch.hoymiles_output
+    to: "on"
+condition:
+  - condition: state
+    entity_id: switch.ac_laden
+    state: "on"
+  - condition: state
+    entity_id: switch.hoymiles_output
+    state: "on"
+action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.ac_laden
+  - delay: "00:00:02"
+  - service: switch.turn_off
+    target:
+      entity_id: switch.hoymiles_output
