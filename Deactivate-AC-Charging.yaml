@@ -1,0 +1,18 @@
+alias: AC-Laden deaktivieren bei maximalem SOC oder zu wenig Solarleistung
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.battery_soc
+    above: "{{ states('input_number.soc_max') | float }}"
+  - platform: numeric_state
+    entity_id: sensor.solar_power
+    below: 750
+    for:
+      minutes: 2
+condition:
+  - condition: state
+    entity_id: switch.ac_laden
+    state: "on"
+action:
+  - service: switch.turn_off
+    target:
+      entity_id: switch.ac_laden
