@@ -1,0 +1,22 @@
+alias: "🔄 AC-Laden wieder aktivieren bei niedriger Netzlast"
+trigger:
+  - platform: numeric_state
+    entity_id: sensor.house_power_draw
+    below: 1100
+    for:
+      minutes: 2
+condition:
+  - condition: numeric_state
+    entity_id: sensor.solar_power
+    above: 1000
+  - condition: numeric_state
+    entity_id: sensor.battery_soc
+    below: 90
+action:
+  - service: switch.turn_on
+    target:
+      entity_id: switch.ac_laden
+  - service: switch.turn_off
+    target:
+      entity_id: switch.hoymiles_output
+mode: single
