@@ -1,0 +1,29 @@
+alias: "Hoymiles Leistung auf Null-Einspeisung regeln"
+description: >
+  Regelt die Abgabeleistung des Hoymiles HM600 alle 3 Sekunden basierend auf dem aktuellen Hausverbrauch.
+  Nur aktiv, wenn Hoymiles eingeschaltet ist.
+mode: single
+trigger:
+  - platform: time_pattern
+    seconds: "/3"
+condition:
+  - condition: state
+    entity_id: switch.hoymiles_output
+    state: "on"
+action:
+  - variables:
+      hauslast: "{{ states('sensor.gesamtleistung_haus') | float(0) }}"
+      einspeisung: >
+        {% set leistung = hauslast %}
+        {% if leistung > 600 %}
+          600
+        {% elif leistung < 0 %}
+          0
+        {% else %}
+          {{ leistung | round(0) }}
+        {% endif %}
+  - service: number.set_value
+    target:
+      entity_id: number.hm_600_limit_persistent_absolute
+    data:
+      value: "{{ einspeisung }}"
