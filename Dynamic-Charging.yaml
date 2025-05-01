@@ -2,27 +2,27 @@ alias: Dynamischer Ladestrom für AC-Laden
 trigger:
   - platform: template
     value_template: >
-      {{ states('sensor.solar_power') | float > (states('input_number.solar_threshold') | float) }}
+      {{ states('sensor.solarinputpower') | float > (states('input_number.solar_threshold') | float) }}
   - platform: state
-    entity_id: sensor.battery1_input_power
+    entity_id: input_number.zendure_input_power
   - platform: time_pattern
     minutes: "/1"  # alle 1 Minute prüfen
 condition:
   - condition: template
     value_template: >
-      {{ states('sensor.solar_power') | float > (states('input_number.solar_threshold') | float) }}
+      {{ states('sensor.solarinputpower') | float > (states('input_number.solar_threshold') | float) }}
   - condition: state
     entity_id: switch.ac_laden
     state: "on"
 action:
   - variables:
-      solar: "{{ states('input_number.solar_power_value') | float(0) }}"
-      akku1: "{{ states('sensor.battery1_input_power') | float(0) }}"
+      solar: "{{ states('sensor.solarinputpower') | float(0) }}"
+      akku1: "{{ states('input_number.zendure_input_power) | float(0) }}"
       verfuegbar: "{{ solar - 500 - akku1 }}"
       ziel: "{{ [ [verfuegbar, 0] | max, 750 ] | min }}"
-      strom: "{{ (ziel / 230) | round(2) }}"
+      strom: "{{ (ziel / 54) | round(2) }}"
   - service: number.set_value
     target:
-      entity_id: number.ac_lader_current
+      entity_id: number.rd6018_controller_output_current
     data:
       value: "{{ strom }}"
