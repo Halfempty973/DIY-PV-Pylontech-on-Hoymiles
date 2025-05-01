@@ -8,9 +8,9 @@ trigger:
   - platform: time_pattern
     minutes: "/1"
 condition:
-  - condition: numeric_state
-    entity_id: sensor.battery_soc
-    below: 90
+#  - condition: numeric_state
+#    entity_id: sensor.battery_soc
+#    below: 90
   - condition: state
     entity_id: switch.hoymiles_output
     state: "off"
