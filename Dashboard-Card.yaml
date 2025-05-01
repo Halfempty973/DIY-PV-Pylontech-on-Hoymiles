@@ -3,19 +3,17 @@ cards:
   - type: entities
     title: 📊 PV- und Batteriesystem
     entities:
-      - entity: sensor.solar_power
+      - entity: sensor.solarinputpower
         name: ☀️ Solarleistung (W)
-      - entity: sensor.battery1_input_power
-        name: 🔋 Leistung Akku 1 (W)
-      - entity: sensor.battery_soc
+      - entity: sensor.battery_0001_state_of_charge_soc
         name: 🔋 Akkustand (Pylontech)
       - entity: switch.ac_laden
         name: ⚡ AC-Laden aktiv
       - entity: switch.hoymiles_output
         name: 🏠 Hoymiles aktiv
-      - entity: input_number.soc_max
+      - entity: input_number.soc_max_pylontech
         name: 🔋 Max. SOC (für AC-Laden Stop)
-      - entity: input_number.soc_min
+      - entity: input_number.soc_min_pylontech
         name: 🔋 Min. SOC (für Hoymiles Start/Stop)
       - entity: input_number.solar_threshold
         name: ☀️ Solar-Schwelle (W für AC-Laden)
@@ -25,15 +23,15 @@ cards:
   - type: entities
     title: ⚙️ Dynamische AC-Ladeleistung
     entities:
-      - entity: number.ac_lader_current
+      - entity: number.rd6018_controller_output_current
         name: ⚡ Ladestrom (Ampere)
         secondary_info: last-changed
       - type: attribute
-        entity: number.ac_lader_current
+        entity: number.rd6018_controller_output_current
         attribute: min
         name: ➖ Min. Strom (A)
       - type: attribute
-        entity: number.ac_lader_current
+        entity: number.rd6018_controller_output_current
         attribute: max
         name: ➕ Max. Strom (A)
 
