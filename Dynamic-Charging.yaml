@@ -17,7 +17,7 @@ condition:
 action:
   - variables:
       solar: "{{ states('sensor.solarinputpower') | float(0) }}"
-      akku1: "{{ states('input_number.zendure_input_power) | float(0) }}"
+      akku1: input_number.zendure_input_power
       verfuegbar: "{{ solar - 500 - akku1 }}"
       ziel: "{{ [ [verfuegbar, 0] | max, 750 ] | min }}"
       strom: "{{ (ziel / 54) | round(2) }}"
