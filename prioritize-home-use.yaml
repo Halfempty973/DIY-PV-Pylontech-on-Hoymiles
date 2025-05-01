@@ -3,14 +3,14 @@ description: >
   Deaktiviert AC-Laden und aktiviert Hoymiles, wenn Hausverbrauch den kombinierten Eigenverbrauch von Zendure (max. 1200W) und Hoymiles (600W) übersteigt.
 trigger:
   - platform: numeric_state
-    entity_id: sensor.house_power_draw
+    entity_id: sensor.gesamtleistung_haus
     above: 1300
     for:
       minutes: 1
 condition:
   - condition: numeric_state
-    entity_id: sensor.battery_soc
-    above: 20
+    entity_id: sensor.battery_0001_state_of_charge_soc
+    above: 15
 action:
   - service: switch.turn_off
     target:
