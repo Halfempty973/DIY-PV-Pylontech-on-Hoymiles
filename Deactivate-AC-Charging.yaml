@@ -1,7 +1,7 @@
 alias: AC-Laden deaktivieren bei maximalem SOC oder zu wenig Solarleistung
 trigger:
   - platform: numeric_state
-    entity_id: sensor.battery_soc
+    entity_id: sensor.battery_0001_state_of_charge_soc
     above: "{{ states('input_number.soc_max_pylontech') | float }}"
   - platform: numeric_state
     entity_id: input_number.solar_threshold
