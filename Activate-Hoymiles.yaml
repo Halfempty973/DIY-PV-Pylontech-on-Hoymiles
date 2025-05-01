@@ -2,7 +2,7 @@ alias: Hoymiles aktivieren
 trigger:
   - platform: template
     value_template: >
-      {{ states('sensor.battery_soc') | float > (states('input_number.soc_min') | float) }}
+      {{ states('sensor.battery_0001_state_of_charge_soc') | float > (states('input_number.soc_min') | float) }}
 condition:
   - condition: state
     entity_id: switch.ac_laden
