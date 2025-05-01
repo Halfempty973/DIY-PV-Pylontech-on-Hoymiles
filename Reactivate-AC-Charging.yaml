@@ -1,16 +1,16 @@
 alias: "🔄 AC-Laden wieder aktivieren bei niedriger Netzlast"
 trigger:
   - platform: numeric_state
-    entity_id: sensor.house_power_draw
+    entity_id: sensor.gesamtleistung_haus
     below: 1100
     for:
       minutes: 2
 condition:
   - condition: numeric_state
-    entity_id: sensor.solar_power
+    entity_id: sensor.solarinputpower
     above: 1000
   - condition: numeric_state
-    entity_id: sensor.battery_soc
+    entity_id: sensor.battery_0001_state_of_charge_soc
     below: 90
 action:
   - service: switch.turn_on
