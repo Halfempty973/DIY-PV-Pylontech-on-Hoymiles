@@ -1,16 +1,32 @@
-alias: Hoymiles aktivieren
-trigger:
-  - platform: template
-    value_template: >
-      {{ states('sensor.battery_0001_state_of_charge_soc') | float > (states('input_number.soc_min') | float) }}
-condition:
+alias: HM600 aktivieren
+description: ""
+triggers:
+  - trigger: time_pattern
+    seconds: /10
+conditions:
   - condition: state
-    entity_id: switch.ac_laden
     state: "off"
-  - condition: state
-    entity_id: switch.hoymiles_output
-    state: "off"
-action:
-  - service: switch.turn_on
+    entity_id: binary_sensor.hm_600_producing
+  - condition: device
+    type: is_off
+    device_id: 574afc0b4ccdecfe26c10592c4f8c0c1
+    entity_id: 1c073db998cef4c21f33dd1d6938500a
+    domain: switch
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 10
+  - condition: numeric_state
+    entity_id: sensor.battery_0001_state_of_charge_soc
+    above: 15
+    below: 90
+  - condition: numeric_state
+    entity_id: sensor.stromzahler_total_active_power
+    above: 100
+actions:
+  - action: button.press
+    metadata: {}
+    data: {}
     target:
-      entity_id: switch.hoymiles_output
+      entity_id: button.hm_600_turn_inverter_on
+mode: single
