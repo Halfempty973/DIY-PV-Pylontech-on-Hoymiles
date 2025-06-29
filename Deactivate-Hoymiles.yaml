@@ -1,13 +1,26 @@
 alias: Hoymiles deaktivieren bei Mindest-SOC
-trigger:
-  - platform: template
-    value_template: >
-      {{ states('sensor.battery_soc') | float < (states('input_number.soc_min') | float) }}
-condition:
+description: ""
+triggers:
+  - value_template: >
+      {{ states('sensor.battery_0001_state_of_charge_soc') | float <
+      (states('input_number.soc_min_pylontech') | float) }}
+    trigger: template
+  - trigger: numeric_state
+    entity_id:
+      - sensor.electriclevel_2
+    above: 85
+  - trigger: time_pattern
+    seconds: "15"
+conditions:
   - condition: state
-    entity_id: switch.hoymiles_output
+    entity_id: binary_sensor.hm_600_producing
     state: "on"
-action:
-  - service: switch.turn_off
+  - condition: numeric_state
+    entity_id: sensor.battery_0001_state_of_charge_soc
+    below: 12
+actions:
+  - action: button.press
+    metadata: {}
+    data: {}
     target:
-      entity_id: switch.hoymiles_output
+      entity_id: button.hm_600_turn_inverter_off
