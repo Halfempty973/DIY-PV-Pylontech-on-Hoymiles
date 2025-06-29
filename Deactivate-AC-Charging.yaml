@@ -1,18 +1,21 @@
 alias: AC-Laden deaktivieren bei maximalem SOC oder zu wenig Solarleistung
-trigger:
-  - platform: numeric_state
+description: ""
+triggers:
+  - trigger: time_pattern
+    seconds: /30
+  - trigger: numeric_state
+    entity_id:
+      - sensor.battery_0001_state_of_charge_soc
+    above: 90
+conditions:
+  - condition: numeric_state
     entity_id: sensor.battery_0001_state_of_charge_soc
-    above: input_number.soc_max_pylontech
-  - platform: numeric_state
-    entity_id: input_number.solar_threshold
+    above: 8
+  - condition: numeric_state
+    entity_id: sensor.solarinputpower_5
     below: 750
-    for:
-      minutes: 2
-condition:
-  - condition: state
-    entity_id: switch.ac_laden
-    state: "on"
-action:
-  - service: switch.turn_off
-    target:
-      entity_id: switch.ac_laden
+actions:
+  - type: turn_off
+    device_id: 574afc0b4ccdecfe26c10592c4f8c0c1
+    entity_id: 1c073db998cef4c21f33dd1d6938500a
+    domain: switch
